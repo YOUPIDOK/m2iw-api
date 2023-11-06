@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Controller\API\CompanyAPI;
+use App\DTO\Company;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CompanyService
 {
@@ -13,7 +15,8 @@ class CompanyService
 
     public function __construct(
         private RequestStack $request,
-        private ParameterBagInterface $parameterBag
+        private ParameterBagInterface $parameterBag,
+        private SerializerInterface $serializer
     ) { }
 
     /**
@@ -21,12 +24,10 @@ class CompanyService
      * @param string $siren
      * @return void
      */
-    public function save(array $company): void
+    public function save(Company $company): void
     {
         $this->request->getSession()->set(self::COMPANY, $company);
-
         $filePath = $this->parameterBag->get('kernel.project_dir') . '/var/' . self::FILE_NAME;
-
-        file_put_contents($filePath, json_encode($company));
+        file_put_contents($filePath, $this->serializer->serialize($company, 'json'));
     }
 }

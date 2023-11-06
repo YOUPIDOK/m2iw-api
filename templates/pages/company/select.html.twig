@@ -3,10 +3,10 @@
 {% block body %}
     L'entreprise a bien été sélectionnée.
     <ul>
-        <li>Raison sociale : {{ company.nom_raison_sociale }}</li>
+        <li>Raison sociale : {{ company.name }}</li>
         <li>Siren : {{ company.siren }}</li>
         <li>{{ company.siege.siret }}</li>
-        <li>{{ company.siege.geo_adresse }}</li>
+        <li>{{ company.siege.address }}</li>
     </ul>
     <a href="{{ path(constant('App\\Controller\\Company\\SearchController::ROUTE_NAME')) }}"><button>Retour à la rechercher</button></a>
 {% endblock %}

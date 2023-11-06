@@ -18,7 +18,7 @@ class SelectController extends AbstractController
     #[Route('/entreprise/selectionner/{siren}', name: self::ROUTE_NAME, methods: [Request::METHOD_GET])]
     public function __invoke(Request $request, CompanyService $companyService, CompanyAPI $companyAPI, string $siren): Response
     {
-        $company = $companyAPI->search($siren)['results'][0];
+        $company = $companyAPI->findBySiren($siren);
 
         $companyService->save($company);
 

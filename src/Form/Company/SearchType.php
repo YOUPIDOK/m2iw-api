@@ -15,9 +15,6 @@ class SearchType extends AbstractType
     {
         $builder->add('q', TextType::class, [
             'label' => false,
-            'attr' => [
-                'min' => 3
-            ],
             'constraints' => [
                 new Length(min: 3)
             ]
