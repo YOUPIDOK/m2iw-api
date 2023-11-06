@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Rechercher une entreprise</h1>
+    {{ form_start(form) }}
+    {{ form_errors(form.q) }}
+    {{ form_widget(form.q) }}
+    <button type="submit">Rechercher</button>
+    {{ form_end(form) }}
+
+    {% if companies is not empty %}
+        <ul>
+            {% for company in companies %}
+                <li>
+                    [{{ company.siren }}] {{ company.nom_raison_sociale }} - {{ company.siege.geo_adresse }}
+                    <a href="{{ path(constant('App\\Controller\\Company\\SelectController::ROUTE_NAME'), {siren: company.siren}) }}">
+                        <button>Sélectionner</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
