@@ -8,6 +8,7 @@ use App\Services\CompanyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -19,6 +20,10 @@ class SelectController extends AbstractController
     public function __invoke(Request $request, CompanyService $companyService, CompanyAPI $companyAPI, string $siren): Response
     {
         $company = $companyAPI->findBySiren($siren);
+
+        if ($company === null) {
+            throw new NotFoundHttpException();
+        }
 
         $companyService->save($company);
 
