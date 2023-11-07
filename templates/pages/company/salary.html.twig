@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Calcul a partir du saliare brut</h1>
+    <h2>{{ company.name }}</h2>
+    {{ form_start(form) }}
+    {{ form_errors(form.salary) }}
+    Salaire brut : {{ form_widget(form.salary) }} €/mois
+    <button type="submit">Calculer</button>
+    {{ form_end(form) }}
+    <br>
+
+    {% if isSubmitted %}
+        <table>
+            <thead>
+            <td></td>
+            <td>CDI</td>
+            <td>CDD</td>
+            <td>Alternance</td>
+            <td>Stage</td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Salaire net avant impôt (€/mois)</td>
+                    <td>{{ netSalaryCDI.netSalaryBeforeTax|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryCDD.netSalaryBeforeTax|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryAlternance.netSalaryBeforeTax|number_format(2, ',', ' ') }} </td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Cotisation salariale (€/mois)</td>
+                    <td>{{ netSalaryCDI.employeeContributions|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryCDD.employeeContributions|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryAlternance.employeeContributions|number_format(2, ',', ' ') }}</td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Coût employeur (€/mois)</td>
+                    <td>{{ netSalaryCDI.employerCosts|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryCDD.employerCosts|number_format(2, ',', ' ') }}</td>
+                    <td>{{ netSalaryAlternance.employerCosts|number_format(2, ',', ' ') }}</td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Indemnité de fin de contrat (€)</td>
+                    <td>X</td>
+                    <td>{{ netSalaryCDD.severancePay|number_format(2, ',', ' ')  }}</td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Gratification minimale (€/mois)</td>
+                    <td>X</td>
+                    <td>X</td>
+                    <td>X</td>
+                    <td>{{ minSalaryInternship.minSalary|number_format(2, ',', ' ') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
