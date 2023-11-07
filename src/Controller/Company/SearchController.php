@@ -2,7 +2,7 @@
 
 namespace App\Controller\Company;
 
-use App\Controller\API\CompanyAPI;
+use App\API\CompanyAPI;
 use App\Form\Company\SearchType;
 use App\Services\CompanyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

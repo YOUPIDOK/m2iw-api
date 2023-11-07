@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Controller\API;
+namespace App\API;
 
-use App\DTO\Address;
-use App\DTO\Company;
+use App\Entity\Company;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CompanyAPI
@@ -25,6 +23,7 @@ class CompanyAPI
         ]);
 
         $res = $res->toArray();
+
         $res['results'] = $this->serializer->denormalize($res['results'], Company::class . '[]');
 
         return $res;

@@ -4,7 +4,10 @@ namespace App\Entity;
 
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
+#[ORM\UniqueConstraint(fields: ['siren'])]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
@@ -14,6 +17,7 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[SerializedName('nom_raison_sociale')]
     private ?string $name = null;
 
     #[ORM\Column(length: 10)]
@@ -21,7 +25,11 @@ class Company
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
+    private ?Address $siege = null;
+
+    #[ORM\Column]
+    #[Ignore]
+    private ?bool $current = false;
 
     public function getId(): ?int
     {
@@ -52,14 +60,26 @@ class Company
         return $this;
     }
 
-    public function getAddress(): ?Address
+    public function getSiege(): ?Address
     {
-        return $this->address;
+        return $this->siege;
     }
 
-    public function setAddress(Address $address): static
+    public function setSiege(Address $siege): static
     {
-        $this->address = $address;
+        $this->siege = $siege;
+
+        return $this;
+    }
+
+    public function isCurrent(): ?bool
+    {
+        return $this->current;
+    }
+
+    public function setCurrent(bool $current): static
+    {
+        $this->current = $current;
 
         return $this;
     }

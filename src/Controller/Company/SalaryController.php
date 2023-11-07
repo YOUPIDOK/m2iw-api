@@ -2,15 +2,12 @@
 
 namespace App\Controller\Company;
 
-use App\Controller\API\CompanyAPI;
-use App\Controller\API\UrssafApi;
+use App\API\UrssafApi;
 use App\Form\Company\SalaryType;
-use App\Form\Company\SearchType;
 use App\Services\CompanyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 

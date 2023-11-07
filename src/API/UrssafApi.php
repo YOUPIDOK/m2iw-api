@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller\API;
+namespace App\API;
 
-use App\DTO\Company;
 use App\DTO\UrsaffApi\MinSalaryInternship;
 use App\DTO\UrsaffApi\NetSalaryAlternance;
 use App\DTO\UrsaffApi\NetSalaryCDD;
 use App\DTO\UrsaffApi\NetSalaryCDI;
+use App\Entity\Company;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -15,7 +15,7 @@ class UrssafApi
 {
     const BASE_URI = 'https://mon-entreprise.urssaf.fr/api/v1/';
 
-    public function __construct(private HttpClientInterface $client, private NormalizerInterface $serializer) { }
+    public function __construct(private HttpClientInterface $client, private readonly NormalizerInterface $serializer) { }
 
     public function netSalaryCDI(int $salary, Company $company): NetSalaryCDI
     {
