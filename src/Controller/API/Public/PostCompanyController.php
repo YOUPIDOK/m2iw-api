@@ -47,8 +47,10 @@ class PostCompanyController extends AbstractController
         $em->persist($company);
         $em->flush();
 
-        return new JsonResponse([
-            'entreprise' => $router->generate(GetCompanyController::ROUTE_NAME, ['siren' => $company->getSiren()],RouterInterface::ABSOLUTE_URL)
-        ], 201);
+        $url = $router->generate(GetCompanyController::ROUTE_NAME, [
+            'siren' => $company->getSiren()
+        ],RouterInterface::ABSOLUTE_URL);
+
+        return new JsonResponse(['entreprise' => $url], 201);
     }
 }
