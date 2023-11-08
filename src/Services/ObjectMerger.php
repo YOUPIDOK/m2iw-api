@@ -33,7 +33,7 @@ class ObjectMerger
             }
         }
 
-        foreach ()
+//        foreach ()
 
         return $object1;
     }
