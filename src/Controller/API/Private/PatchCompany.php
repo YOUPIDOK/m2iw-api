@@ -28,21 +28,18 @@ class PatchCompany extends AbstractController
     #[Route('/api-protege/{siren}', name: self::ROUTE_NAME, methods: [Request::METHOD_PATCH])]
     #[ParamConverter('company', options: ['mapping' => ['siren' => 'siren']])]
     public function __invoke(
-        Company $company,
-        EntityManagerInterface $em,
-        Request $request,
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        RouterInterface $router,
-        CompanyRepository $companyRepository,
+        Company $company, EntityManagerInterface $em, Request $request,
+        SerializerInterface $serializer, ValidatorInterface $validator,
+        RouterInterface $router, CompanyRepository $companyRepository,
         ObjectMerger $merger,
     ) {
-        if ($companyRepository->findOneBy(['siren' => $company->getSiren()]) === null) {
-            throw new ConflictHttpException("Cette entreprise n'existe pas.");
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            return new JsonResponse(['error' => 'Invalid json'], 400);
         }
 
         $companyDTO = $company->toDTO() ;
-        ObjectMerger::mergeData($companyDTO, json_decode($request->getContent(), true), [
+        ObjectMerger::mergeData($companyDTO, $data, [
             'id', 'siren'
         ]);
 
