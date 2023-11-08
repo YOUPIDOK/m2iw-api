@@ -26,4 +26,6 @@ class CompanyService
     {
         return $this->companyRepository->findOneBy(['current' => true]);
     }
+
+
 }

@@ -139,4 +139,10 @@ class Address
         $this->longitude = $longitude;
         return $this;
     }
+
+    public function setId(?int $id): Address
+    {
+        $this->id = $id;
+        return $this;
+    }
 }

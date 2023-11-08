@@ -8,6 +8,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CompanyDTO
 {
+    private ?int $id = null;
+
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Length(min: 9, max: 9)]
@@ -18,11 +20,9 @@ class CompanyDTO
     private ?string $raison_sociale = null;
 
     #[Assert\Valid]
-    private AddressDTO $adresse;
+    private ?AddressDTO $adresse = null;
 
-    public function __construct() {
-        $this->adresse = new AddressDTO();
-    }
+    public function __construct() {}
 
     public function setSiren(?int $siren): CompanyDTO
     {
@@ -62,19 +62,32 @@ class CompanyDTO
         $address = $this->getAdresse();
 
         $siege = new Address();
-        $siege->setAddress($address->getNum() . ' ' . $address->getVoie() . '(' . $address->getCodePostale() . ') ' . $address->getVille());
-        $siege->setNum($address->getNum());
-        $siege->setLatitude($address->getGps()->getLatitude());
-        $siege->setLongitude($address->getGps()->getLongitude());
-        $siege->setRoute($address->getVoie());
-        $siege->setPostalCode($address->getCodePostale());
-        $siege->setTown($address->getVille());
+        $siege->setId($address?->getId());
+        $siege->setAddress($address?->getNum() . ' ' . $address?->getVoie() . '(' . $address?->getCodePostale() . ') ' . $address?->getVille());
+        $siege->setNum($address?->getNum());
+        $siege->setLatitude($address?->getGps()?->getLatitude());
+        $siege->setLongitude($address?->getGps()?->getLongitude());
+        $siege->setRoute($address?->getVoie());
+        $siege->setPostalCode($address?->getCodePostale());
+        $siege->setTown($address?->getVille());
 
         $company = new Company();
+        $company->setId($this->id);
         $company->setName($this->raison_sociale);
         $company->setSiren($this->siren);
         $company->setSiege($siege);
 
         return $company;
+    }
+
+    public function setId(?int $id): CompanyDTO
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

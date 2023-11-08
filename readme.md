@@ -9,6 +9,7 @@
 composer install
 php8.2 bin/console doctrine:database:create 
 php8.2 bin/console doctrine:schema:update --complete --force
+php8.2 bin/console doctrine:fixtures:load --append
 ```
 
 ## Server

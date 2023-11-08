@@ -5,6 +5,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class AddressDTO
 {
+    private ?int $id = null;
     #[Assert\Valid]
     private GPSDTO $gps;
     private ?int $num = null;
@@ -15,9 +16,7 @@ class AddressDTO
     #[Assert\NotBlank]
      private ?string $ville = null;
 
-    public function __construct() {
-        $this->gps = new GPSDTO();
-    }
+    public function __construct() {}
 
     public function setGps(GPSDTO $gps): AddressDTO
     {
@@ -72,6 +71,17 @@ class AddressDTO
     {
         $this->ville = $ville;
         return $this;
+    }
+
+    public function setId(?int $id): AddressDTO
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
 
