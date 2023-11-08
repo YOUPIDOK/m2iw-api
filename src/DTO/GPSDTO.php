@@ -4,8 +4,8 @@ namespace App\DTO;
 
 class GPSDTO
 {
-    private ?string $longitude = null;
-    private ?string $latitude = null;
+    public ?string $longitude = null;
+    public ?string $latitude = null;
 
     public function getLongitude(): ?string
     {

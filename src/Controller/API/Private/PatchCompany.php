@@ -9,6 +9,7 @@ use App\Repository\CompanyRepository;
 use App\Services\CompanyService;
 use App\Services\ObjectMerger;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,35 +35,30 @@ class PatchCompany extends AbstractController
         ValidatorInterface $validator,
         RouterInterface $router,
         CompanyRepository $companyRepository,
-        ObjectMerger $merger
+        ObjectMerger $merger,
     ) {
-        $companyJson = $request->getContent();
-        $companyDTOBase = $company->toDTO();
-
-//        $companyDTO = $serializer->deserialize($companyJson, CompanyDTO::class, 'json');
-//        $errors = $validator->validate($companyDTO);
-
-        $companyDTO = $merger->merge($companyDTOBase, (object) json_decode($request->getContent()));
-
-        dd($companyDTO);
-//        if (count($errors) > 0) {
-//            return new JsonResponse(['errors' => (string) $errors], 400);
-//        }
-
-        if ($companyRepository->findOneBy(['siren' => $companyDTO->getSiren()]) !== null) {
-            throw new ConflictHttpException("Cette entreprise existe déjà.");
+        if ($companyRepository->findOneBy(['siren' => $company->getSiren()]) === null) {
+            throw new ConflictHttpException("Cette entreprise n'existe pas.");
         }
 
+        $companyDTO = $company->toDTO() ;
+        ObjectMerger::mergeData($companyDTO, json_decode($request->getContent(), true), [
+            'id', 'siren'
+        ]);
 
-        $company = $companyDTO->toCompany();
+        $errors = $validator->validate($companyDTO);
+
+        if (count($errors) > 0) {
+            return new JsonResponse(['errors' => (string) $errors], 400);
+        }
+
+        $company = $companyDTO->toCompany($company);
         $em->flush();
 
         $url = $router->generate(GetCompanyController::ROUTE_NAME, [
             'siren' => $company->getSiren()
         ],RouterInterface::ABSOLUTE_URL);
 
-        return new JsonResponse(['entreprise' => $url], 201);
-
-        return new Response();
+        return new JsonResponse(['entreprise' => $url], 200);
     }
 }

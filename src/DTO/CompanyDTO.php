@@ -8,19 +8,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CompanyDTO
 {
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Length(min: 9, max: 9)]
-    private ?int $siren = null;
+    public ?int $siren = null;
 
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    private ?string $raison_sociale = null;
+    public ?string $raison_sociale = null;
 
     #[Assert\Valid]
-    private ?AddressDTO $adresse = null;
+    public ?AddressDTO $adresse = null;
 
     public function __construct() {}
 
@@ -57,11 +57,15 @@ class CompanyDTO
         return $this;
     }
 
-    public function toCompany(): Company
+    public function toCompany(Company $company = null): Company
     {
         $address = $this->getAdresse();
 
-        $siege = new Address();
+        $siege = $company?->getSiege();
+        if ($siege === null) {
+            $siege = new Address();
+        }
+
         $siege->setId($address?->getId());
         $siege->setAddress($address?->getNum() . ' ' . $address?->getVoie() . '(' . $address?->getCodePostale() . ') ' . $address?->getVille());
         $siege->setNum($address?->getNum());
@@ -71,7 +75,10 @@ class CompanyDTO
         $siege->setPostalCode($address?->getCodePostale());
         $siege->setTown($address?->getVille());
 
-        $company = new Company();
+        if ($company === null) {
+            $company = new Company();
+        }
+
         $company->setId($this->id);
         $company->setName($this->raison_sociale);
         $company->setSiren($this->siren);

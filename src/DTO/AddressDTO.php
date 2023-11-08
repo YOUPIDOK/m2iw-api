@@ -5,16 +5,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class AddressDTO
 {
-    private ?int $id = null;
+    public ?int $id = null;
     #[Assert\Valid]
-    private GPSDTO $gps;
-    private ?int $num = null;
-    private ?string $voie = null;
+    public GPSDTO $gps;
+    public ?int $num = null;
+    public ?string $voie = null;
     #[Assert\Regex(pattern: "/^\d{5}$/", message:"Le code postal doit contenir exactement 5 chiffres.")]
-    private ?int $code_postale = null;
+    public ?int $code_postale = null;
     #[Assert\NotNull]
     #[Assert\NotBlank]
-     private ?string $ville = null;
+    public ?string $ville = null;
 
     public function __construct() {}
 
